@@ -6,13 +6,18 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.RowArticleBinding;
+import com.example.heba.raye7task.generated.callback.OnClickListener;
 import com.example.heba.raye7task.model.Article;
 import com.example.heba.raye7task.viewmodel.ArticleViewModel;
 
@@ -22,6 +27,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     private List<Article> articlesList;
     private Context context;
     private ArticleViewModel articleViewModel;
+    private int selectedPosition = -1;
 
     public ArticlesAdapter(List<Article> articlesList, Context context){
         this.articlesList = articlesList;
@@ -42,8 +48,22 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ArticleItemView holder, int position) {
-        holder.binding.setArticle(articlesList.get(position));
+    public void onBindViewHolder(@NonNull final ArticleItemView holder, final int position) {
+        final Article article = articlesList.get(position);
+        holder.binding.setArticle(article);
+
+        holder.binding.IBFav.setImageDrawable(article.getFav() ? ContextCompat.getDrawable(context, R.drawable.fav_h_icon) :
+                ContextCompat.getDrawable(context, R.drawable.fav_icon));
+
+        holder.binding.IBFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                article.setFav(!article.getFav());
+                holder.binding.IBFav.setImageDrawable(article.getFav() ? ContextCompat.getDrawable(context, R.drawable.fav_h_icon) :
+                        ContextCompat.getDrawable(context, R.drawable.fav_icon));
+            }
+        });
+
         holder.binding.executePendingBindings();
     }
 
