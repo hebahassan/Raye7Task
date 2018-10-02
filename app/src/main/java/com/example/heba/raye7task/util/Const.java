@@ -12,4 +12,6 @@ public class Const {
 
     PREF = "sharedPref",
     FAV = "favorites";
+
+    public static final Integer ARTICLE_ID = 1;
 }

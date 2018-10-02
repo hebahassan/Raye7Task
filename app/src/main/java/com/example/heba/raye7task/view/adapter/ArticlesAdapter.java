@@ -19,19 +19,22 @@ import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.RowArticleBinding;
 import com.example.heba.raye7task.generated.callback.OnClickListener;
 import com.example.heba.raye7task.model.Article;
+import com.example.heba.raye7task.util.PrefUtil;
 import com.example.heba.raye7task.viewmodel.ArticleViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ArticleItemView> {
     private List<Article> articlesList;
     private Context context;
-    private ArticleViewModel articleViewModel;
-    private int selectedPosition = -1;
+    private PrefUtil prefUtil;
+    private List<Article> favArticlesList = new ArrayList<>();
 
     public ArticlesAdapter(List<Article> articlesList, Context context){
         this.articlesList = articlesList;
         this.context = context;
+        prefUtil = new PrefUtil(context);
     }
 
     @NonNull
@@ -40,7 +43,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         RowArticleBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.row_article, parent, false);
 
-        articleViewModel = ViewModelProviders.of((AppCompatActivity)context).get(ArticleViewModel.class);
+        ArticleViewModel articleViewModel = ViewModelProviders.of((AppCompatActivity)context).get(ArticleViewModel.class);
         binding.setArticleVM(articleViewModel);
         binding.setLifecycleOwner((AppCompatActivity)context);
 
@@ -59,8 +62,29 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
             @Override
             public void onClick(View view) {
                 article.setFav(!article.getFav());
-                holder.binding.IBFav.setImageDrawable(article.getFav() ? ContextCompat.getDrawable(context, R.drawable.fav_h_icon) :
-                        ContextCompat.getDrawable(context, R.drawable.fav_icon));
+
+                if(article.getFav()){
+                    holder.binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_h_icon));
+
+                    favArticlesList = prefUtil.getFavoritesList();
+                    favArticlesList.add(article);
+                    prefUtil.saveFavoritesList(favArticlesList);
+                }
+                else {
+                    holder.binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_icon));
+
+                    favArticlesList = prefUtil.getFavoritesList();
+
+                    for(Article a : favArticlesList){
+                        if(a.getTitle().equals(article.getTitle())){
+                            favArticlesList.remove(favArticlesList.indexOf(a));
+                        }
+                    }
+
+                    prefUtil.saveFavoritesList(favArticlesList);
+                }
+
+                prefUtil.getAllFavData();
             }
         });
 

@@ -1,5 +1,6 @@
 package com.example.heba.raye7task.model;
 
+import com.example.heba.raye7task.util.Const;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
