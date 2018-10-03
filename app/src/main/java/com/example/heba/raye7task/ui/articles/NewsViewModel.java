@@ -20,6 +20,7 @@ import com.example.heba.raye7task.network.ApiService;
 import com.example.heba.raye7task.util.Const;
 import com.example.heba.raye7task.util.PrefUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.example.heba.raye7task.ui.articles.ArticlesActivity.currentPage;
 
 /**
  * Created by heba on 30-Sep-18.
@@ -42,8 +45,9 @@ public class NewsViewModel extends AndroidViewModel {
     private PrefUtil prefUtil;
 
     private MutableLiveData<List<Article>> articlesData;
+    private List<Article> articleList = new ArrayList<>();
 
-    ApiService apiService;
+    private ApiService apiService;
 
     public NewsViewModel(@NonNull Application application) {
         super(application);
@@ -51,12 +55,12 @@ public class NewsViewModel extends AndroidViewModel {
         apiService = ApiClient.getClient().create(ApiService.class);
     }
 
-    public void getNewsLiveData(){
+    public void getNewsLiveData(int page){
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("apiKey", Const.API_KEY);
         queryMap.put("sources", Const.SOURCE);
         queryMap.put("language", Const.LANGUAGE);
-        //Todo: add page param
+        queryMap.put("page", page);
 
         apiService.getEveryThing(queryMap).enqueue(new Callback<News>() {
             @Override
@@ -67,19 +71,15 @@ public class NewsViewModel extends AndroidViewModel {
                     if(response.body().getStatus().equals(Const.SUCCESS)){
                         Log.d("getNewsList", "total results = " + response.body().getTotalResults());
                     }
-                    getArticlesData().setValue(response.body().getArticles());
-                }
-                else {
-                    getArticlesData().setValue(null);
+
+                    articleList.addAll(response.body().getArticles());
+                    getArticlesData().setValue(articleList);
                 }
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
-                getArticlesData().setValue(null);
-            }
+            public void onFailure(Call<News> call, Throwable t) { }
         });
-
     }
 
     public MutableLiveData<Integer> getBusy(){
@@ -109,10 +109,7 @@ public class NewsViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<String> getTextMsg(){
-//        if(newsData.getValue() == null)
-        if(articlesData.getValue() == null)
-            textMsg.setValue("Connection Error");
-        else if(articlesData.getValue().size() == 0) //newsData.getValue().getArticles().size() == 0
+        if(articlesData.getValue() != null && articlesData.getValue().size() == 0)
             textMsg.setValue("No Articles Found");
 
         return textMsg;
@@ -135,7 +132,10 @@ public class NewsViewModel extends AndroidViewModel {
     }
 
     public void onAllClicked(){
-        getNewsLiveData();
+        articleList.clear();
+        articlesData.setValue(articleList);
+        currentPage = 1;
+        getNewsLiveData(currentPage);
         allToggleSelection.setValue(true);
     }
 

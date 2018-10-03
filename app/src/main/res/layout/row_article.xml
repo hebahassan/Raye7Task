@@ -9,7 +9,7 @@
             type="com.example.heba.raye7task.model.Article"/>
 
             <variable
-                name="articleVM"
+                name="vm"
                 type="com.example.heba.raye7task.ui.articles.NewsViewModel"/>
     </data>
 
