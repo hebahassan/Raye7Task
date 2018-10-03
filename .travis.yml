@@ -31,7 +31,7 @@ script:
 
 deploy:
   provider: releases
-  api-key: d1b96df15e01b07af33ff0d62a600dda6b538d18
+  api-key: $GITHUB_APIKEY
   file: "app/build/outputs/apk/app-debug.apk"
   skip_cleanup: true
   on:
