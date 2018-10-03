@@ -6,26 +6,35 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.RowArticleBinding;
+import com.example.heba.raye7task.generated.callback.OnClickListener;
 import com.example.heba.raye7task.model.Article;
+import com.example.heba.raye7task.util.PrefUtil;
 import com.example.heba.raye7task.viewmodel.ArticleViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ArticleItemView> {
     private List<Article> articlesList;
     private Context context;
-    private ArticleViewModel articleViewModel;
+    private PrefUtil prefUtil;
+    private List<Article> favArticlesList = new ArrayList<>();
 
     public ArticlesAdapter(List<Article> articlesList, Context context){
         this.articlesList = articlesList;
         this.context = context;
+        prefUtil = new PrefUtil(context);
     }
 
     @NonNull
@@ -34,7 +43,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         RowArticleBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.row_article, parent, false);
 
-        articleViewModel = ViewModelProviders.of((AppCompatActivity)context).get(ArticleViewModel.class);
+        ArticleViewModel articleViewModel = ViewModelProviders.of((AppCompatActivity)context).get(ArticleViewModel.class);
         binding.setArticleVM(articleViewModel);
         binding.setLifecycleOwner((AppCompatActivity)context);
 
@@ -42,8 +51,43 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ArticleItemView holder, int position) {
-        holder.binding.setArticle(articlesList.get(position));
+    public void onBindViewHolder(@NonNull final ArticleItemView holder, final int position) {
+        final Article article = articlesList.get(position);
+        holder.binding.setArticle(article);
+
+        holder.binding.IBFav.setImageDrawable(article.getFav() ? ContextCompat.getDrawable(context, R.drawable.fav_h_icon) :
+                ContextCompat.getDrawable(context, R.drawable.fav_icon));
+
+        holder.binding.IBFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                article.setFav(!article.getFav());
+
+                if(article.getFav()){
+                    holder.binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_h_icon));
+
+                    favArticlesList = prefUtil.getFavoritesList();
+                    favArticlesList.add(article);
+                    prefUtil.saveFavoritesList(favArticlesList);
+                }
+                else {
+                    holder.binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_icon));
+
+                    favArticlesList = prefUtil.getFavoritesList();
+
+                    for(Article a : favArticlesList){
+                        if(a.getTitle().equals(article.getTitle())){
+                            favArticlesList.remove(favArticlesList.indexOf(a));
+                        }
+                    }
+
+                    prefUtil.saveFavoritesList(favArticlesList);
+                }
+
+                prefUtil.getAllFavData();
+            }
+        });
+
         holder.binding.executePendingBindings();
     }
 

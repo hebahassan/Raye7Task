@@ -1,5 +1,6 @@
 package com.example.heba.raye7task.model;
 
+import com.example.heba.raye7task.util.Const;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -32,6 +33,8 @@ public class Article {
     @SerializedName("content")
     @Expose
     private String content;
+
+    private Boolean isFav = false;
 
     public Source getSource() {
         return source;
@@ -95,5 +98,16 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Boolean getFav() {
+        if(isFav == null)
+            return false;
+        else
+            return isFav;
+    }
+
+    public void setFav(Boolean fav) {
+        isFav = fav;
     }
 }

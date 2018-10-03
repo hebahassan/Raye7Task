@@ -8,5 +8,10 @@ public class Const {
     public static final String API_KEY = "cbfcd1ed2b5745a2a7a00316d9d449b1",
     SUCCESS = "ok",
     SOURCE = "USA Today",
-    LANGUAGE = "en";
+    LANGUAGE = "en",
+
+    PREF = "sharedPref",
+    FAV = "favorites";
+
+    public static final Integer ARTICLE_ID = 1;
 }
