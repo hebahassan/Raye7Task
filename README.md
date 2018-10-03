@@ -1,6 +1,6 @@
 # Raye7Task
 
-Display USA Today articles
+Display *USA Today* English articles
 
 ## Archtictural
 MVVM
