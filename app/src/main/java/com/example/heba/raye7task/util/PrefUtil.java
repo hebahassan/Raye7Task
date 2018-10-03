@@ -1,5 +1,7 @@
 package com.example.heba.raye7task.util;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -29,11 +31,6 @@ public class PrefUtil {
         gson = new Gson();
     }
 
-    public void saveFavArticle(Article favArticle, int articleId){
-        String newsString = gson.toJson(favArticle);
-        editor.putString(Const.FAV + articleId, newsString).apply();
-    }
-
     public void saveFavoritesList(List<Article> articlesList){
         String favString = gson.toJson(articlesList);
         editor.putString(Const.FAV, favString).apply();
@@ -46,7 +43,7 @@ public class PrefUtil {
             Article[] favoriteItems = gson.fromJson(favString,
                     Article[].class);
             favArticleList = Arrays.asList(favoriteItems);
-            favArticleList = new ArrayList<Article>(favArticleList);
+            favArticleList = new ArrayList<>(favArticleList);
         }
         else {
             favArticleList = new ArrayList<>();
@@ -55,26 +52,9 @@ public class PrefUtil {
         return favArticleList;
     }
 
-    public Article getFavArticle(int articleId){
-        Article article = new Article();
-        if(sharedPreferences.contains(Const.FAV + articleId)){
-            String favString = sharedPreferences.getString(Const.FAV + articleId, "");
-            article = gson.fromJson(favString, Article.class);
-        }
-        return article;
-    }
-
-    public void getAllFavData(){
-        Log.d("map_values", "IN..");
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()){
-            Log.d("map_values", entry.getKey() + ": " + entry.getValue().toString());
-        }
-    }
-
-    public void removeFavArticle(int articleId){
-        if(sharedPreferences.contains(Const.FAV + articleId)){
-            editor.remove(Const.FAV + articleId).apply();
-        }
+    public MutableLiveData<List<Article>> getFavoritesLiveData(){
+        MutableLiveData<List<Article>> articleLiveList = new MutableLiveData<>();
+        articleLiveList.setValue(getFavoritesList());
+        return articleLiveList;
     }
 }

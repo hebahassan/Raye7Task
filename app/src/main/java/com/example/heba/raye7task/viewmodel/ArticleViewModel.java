@@ -37,11 +37,6 @@ public class ArticleViewModel extends AndroidViewModel {
                 .into(imageView);
     }
 
-//    public void onFavClicked(Article article){
-//        article.setFav(!article.getFav());
-//        Log.d("favorite", article.getTitle() + " fav: " + article.getFav());
-//    }
-
     public void onArticleClicked(String articleUrl){
         Log.d("article_url", articleUrl);
 

@@ -58,50 +58,46 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         holder.binding.IBFav.setImageDrawable(article.getFav() ? ContextCompat.getDrawable(context, R.drawable.fav_h_icon) :
                 ContextCompat.getDrawable(context, R.drawable.fav_icon));
 
-        holder.binding.IBFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                article.setFav(!article.getFav());
-
-                if(article.getFav()){
-                    holder.binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_h_icon));
-
-                    favArticlesList = prefUtil.getFavoritesList();
-                    favArticlesList.add(article);
-                    prefUtil.saveFavoritesList(favArticlesList);
-                }
-                else {
-                    holder.binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_icon));
-
-                    favArticlesList = prefUtil.getFavoritesList();
-
-                    for(Article a : favArticlesList){
-                        if(a.getTitle().equals(article.getTitle())){
-                            favArticlesList.remove(favArticlesList.indexOf(a));
-                        }
-                    }
-
-                    prefUtil.saveFavoritesList(favArticlesList);
-                }
-
-                prefUtil.getAllFavData();
-            }
-        });
-
         holder.binding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return articlesList.size();
+        return articlesList != null && articlesList.size() > 0 ? articlesList.size() : 0;
     }
 
     class ArticleItemView extends RecyclerView.ViewHolder {
         RowArticleBinding binding;
 
-        ArticleItemView(RowArticleBinding binding) {
+        ArticleItemView(final RowArticleBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.IBFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Article article = articlesList.get(getAdapterPosition());
+                    article.setFav(!article.getFav());
+
+                    if (article.getFav()) {
+                        binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_h_icon));
+
+                        favArticlesList = prefUtil.getFavoritesList();
+                        favArticlesList.add(article);
+                        prefUtil.saveFavoritesList(favArticlesList);
+                    } else {
+                        binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_icon));
+
+                        favArticlesList = prefUtil.getFavoritesList();
+                        for (Article a : favArticlesList) {
+                            if (a.getTitle().equals(article.getTitle())) {
+                                favArticlesList.remove(favArticlesList.indexOf(a));
+                            }
+                        }
+                        prefUtil.saveFavoritesList(favArticlesList);
+                    }
+                }
+            });
         }
     }
 }

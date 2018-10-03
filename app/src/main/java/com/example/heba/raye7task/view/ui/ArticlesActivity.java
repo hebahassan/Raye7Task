@@ -8,13 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.ActivityArticlesBinding;
-import com.example.heba.raye7task.model.News;
+import com.example.heba.raye7task.model.Article;
 import com.example.heba.raye7task.view.adapter.ArticlesAdapter;
 import com.example.heba.raye7task.viewmodel.NewsViewModel;
+
+import java.util.List;
 
 public class ArticlesActivity extends AppCompatActivity {
     ActivityArticlesBinding binding;
@@ -29,15 +30,13 @@ public class ArticlesActivity extends AppCompatActivity {
         binding.setNewsViewModel(newsViewModel);
         binding.setLifecycleOwner(this);
 
-        newsViewModel.getNewsData().observe(this, new Observer<News>() {
+        newsViewModel.getArticlesData().observe(this, new Observer<List<Article>>() {
             @Override
-            public void onChanged(@Nullable News news) {
-                if(news != null){
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ArticlesActivity.this);
-                    articlesAdapter = new ArticlesAdapter(news.getArticles(), ArticlesActivity.this);
-                    binding.RVNews.setLayoutManager(layoutManager);
-                    binding.RVNews.setAdapter(articlesAdapter);
-                }
+            public void onChanged(@Nullable List<Article> articles) {
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ArticlesActivity.this);
+                articlesAdapter = new ArticlesAdapter(articles, ArticlesActivity.this);
+                binding.RVNews.setLayoutManager(layoutManager);
+                binding.RVNews.setAdapter(articlesAdapter);
 
                 newsViewModel.getBusy();
                 newsViewModel.getTextVisibility();
