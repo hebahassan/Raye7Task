@@ -36,10 +36,9 @@ import static com.example.heba.raye7task.ui.articles.ArticlesActivity.currentPag
 
 public class NewsViewModel extends AndroidViewModel {
     private MutableLiveData<Integer> busy; //0 -> visible, 8 -> gone
-    private MutableLiveData<Integer> textVisibility = new MutableLiveData<>();
-    private MutableLiveData<String> textMsg = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> allToggleSelection; //true -> api list, false -> favorites list
+    private MutableLiveData<Boolean> favClickable = new MutableLiveData<>();
 
     private PrefUtil prefUtil;
 
@@ -59,6 +58,9 @@ public class NewsViewModel extends AndroidViewModel {
      * @param page number of current page that used in api call in order to load more data
      */
     public void getNewsLiveData(int page){
+        getBusy().setValue(0);
+        getFavClickable().setValue(false);
+
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("apiKey", Const.API_KEY);
         queryMap.put("sources", Const.SOURCE);
@@ -69,20 +71,20 @@ public class NewsViewModel extends AndroidViewModel {
         apiService.getEveryThing(queryMap).enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {
-                Log.d("getNewsList", call.request().toString());
-
                 if(response.isSuccessful()){
-                    if(response.body().getStatus().equals(Const.SUCCESS)){
-                        Log.d("getNewsList", "total results = " + response.body().getTotalResults());
-                    }
-
                     articleList.addAll(response.body().getArticles());
                     getArticlesData().setValue(articleList);
                 }
+
+                getBusy().setValue(8);
+                getFavClickable().setValue(true);
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) { }
+            public void onFailure(Call<News> call, Throwable t) {
+                getBusy().setValue(8);
+                getFavClickable().setValue(true);
+            }
         });
     }
 
@@ -97,34 +99,9 @@ public class NewsViewModel extends AndroidViewModel {
     public MutableLiveData<Integer> getBusy(){
         if(busy == null){
             busy = new MutableLiveData<>();
-            busy.setValue(0);
-        }
-        else {
-            busy.setValue(8);
         }
 
         return busy;
-    }
-
-    public MutableLiveData<Integer> getTextVisibility() {
-        if(busy != null && busy.getValue() == 8){
-            if(articlesData.getValue() == null || articlesData.getValue().size() == 0){
-                textVisibility.setValue(0);
-            }else {
-                textVisibility.setValue(8);
-            }
-        }
-        else
-            textVisibility.setValue(8);
-
-        return textVisibility;
-    }
-
-    public MutableLiveData<String> getTextMsg(){
-        if(articlesData.getValue() != null && articlesData.getValue().size() == 0)
-            textMsg.setValue("No Articles Found");
-
-        return textMsg;
     }
 
     public MutableLiveData<Boolean> getAllToggleSelection() {
@@ -133,6 +110,10 @@ public class NewsViewModel extends AndroidViewModel {
             allToggleSelection.setValue(true);
         }
         return allToggleSelection;
+    }
+
+    public MutableLiveData<Boolean> getFavClickable() {
+        return favClickable;
     }
 
     /**

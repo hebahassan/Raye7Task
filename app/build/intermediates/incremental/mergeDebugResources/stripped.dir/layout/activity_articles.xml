@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+                                                              
+                                                        
     
-    <data>
-        <variable
-            name="newsViewModel"
-            type="com.example.heba.raye7task.ui.articles.NewsViewModel"/>
-    </data>
+    
+                 
+                                
+                                                                         
+           
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/main_bg">
+        android:background="@drawable/main_bg" android:tag="layout/activity_articles_0" xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <include
             layout="@layout/toolbar"
@@ -28,7 +28,22 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="@{newsViewModel.busy}"/>
+            android:tag="binding_1"                   />
+
+        <TextView
+            android:id="@+id/TV_articles_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent" />
+
+        <!--android:visibility="@{newsViewModel.textVisibility}"
+            android:text="@{newsViewModel.textMsg}"-->
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -49,21 +64,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:background="@{newsViewModel.allToggleSelection ? @drawable/all_selected : @drawable/all_unselected}"
+                android:tag="binding_2"                                                                                     
                 android:text="All Articles"
                 android:textColor="@color/colorAccent"
-                android:onClick="@{()-> newsViewModel.onAllClicked()}"/>
+                                                                      />
 
             <Button
                 android:id="@+id/BT_fav"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:background="@{!newsViewModel.allToggleSelection ? @drawable/fav_selected : @drawable/fav_unselected}"
+                android:tag="binding_3"                                                                                      
                 android:text="Favorites"
                 android:textColor="@color/colorAccent"
-                android:clickable="@{newsViewModel.favClickable ? true : false}"
-                android:onClick="@{()-> newsViewModel.onFavClick()}"/>
+                                                                                
+                                                                    />
 
         </LinearLayout>
 
@@ -82,4 +97,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-</layout>
+         

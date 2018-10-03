@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.ActivityArticlesBinding;
@@ -39,15 +40,9 @@ public class ArticlesActivity extends AppCompatActivity {
             public void onChanged(@Nullable final List<Article> articles) {
                 layoutManager = new LinearLayoutManager(ArticlesActivity.this);
                 layoutManager.scrollToPosition(displayPos);
-
                 articlesAdapter = new ArticlesAdapter(articles, ArticlesActivity.this);
-
                 binding.RVNews.setLayoutManager(layoutManager);
                 binding.RVNews.setAdapter(articlesAdapter);
-
-                newsViewModel.getBusy();
-                newsViewModel.getTextVisibility();
-                newsViewModel.getTextMsg();
             }
         });
 

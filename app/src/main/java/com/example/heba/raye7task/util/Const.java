@@ -10,6 +10,7 @@ public class Const {
     SOURCE = "USA Today",
     LANGUAGE = "en",
     DAY = "publishedAt",
+    CODE_MAX = "maximumResultsReached",
 
     PREF = "sharedPref",
     FAV = "favorites";
