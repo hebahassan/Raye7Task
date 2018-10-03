@@ -51,10 +51,4 @@ public class PrefUtil {
 
         return favArticleList;
     }
-
-    public MutableLiveData<List<Article>> getFavoritesLiveData(){
-        MutableLiveData<List<Article>> articleLiveList = new MutableLiveData<>();
-        articleLiveList.setValue(getFavoritesList());
-        return articleLiveList;
-    }
 }

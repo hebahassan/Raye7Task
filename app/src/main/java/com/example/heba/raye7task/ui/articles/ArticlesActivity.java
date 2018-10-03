@@ -8,13 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.ActivityArticlesBinding;
 import com.example.heba.raye7task.model.Article;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ArticlesActivity extends AppCompatActivity {

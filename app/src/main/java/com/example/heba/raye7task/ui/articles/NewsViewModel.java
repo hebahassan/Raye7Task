@@ -1,6 +1,5 @@
 package com.example.heba.raye7task.ui.articles;
 
-
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
@@ -60,6 +59,7 @@ public class NewsViewModel extends AndroidViewModel {
         queryMap.put("apiKey", Const.API_KEY);
         queryMap.put("sources", Const.SOURCE);
         queryMap.put("language", Const.LANGUAGE);
+        queryMap.put("sortBy", Const.DAY);
         queryMap.put("page", page);
 
         apiService.getEveryThing(queryMap).enqueue(new Callback<News>() {
@@ -80,6 +80,14 @@ public class NewsViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<News> call, Throwable t) { }
         });
+    }
+
+    public MutableLiveData<List<Article>> getArticlesData() {
+        if (articlesData == null) {
+            articlesData = new MutableLiveData<>();
+        }
+
+        return articlesData;
     }
 
     public MutableLiveData<Integer> getBusy(){
@@ -113,14 +121,6 @@ public class NewsViewModel extends AndroidViewModel {
             textMsg.setValue("No Articles Found");
 
         return textMsg;
-    }
-
-    public MutableLiveData<List<Article>> getArticlesData() {
-        if (articlesData == null) {
-            articlesData = new MutableLiveData<>();
-        }
-
-        return articlesData;
     }
 
     public MutableLiveData<Boolean> getAllToggleSelection() {

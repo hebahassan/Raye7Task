@@ -9,6 +9,7 @@ public class Const {
     SUCCESS = "ok",
     SOURCE = "USA Today",
     LANGUAGE = "en",
+    DAY = "publishedAt",
 
     PREF = "sharedPref",
     FAV = "favorites";
