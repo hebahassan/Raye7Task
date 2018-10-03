@@ -1,0 +1,22 @@
+language: android
+script: ./gradlew build assembleRelease
+android:
+  components:
+  - build-tools-27.1.1
+  - android-27
+
+deploy:
+  - provider: releases
+    api_key:
+      d1b96df15e01b07af33ff0d62a600dda6b538d18
+    file: app/build/outputs/apk/app-release.apk
+    on:
+      repo: hebahassan/Raye7Task
+      tags: true
+
+notifications:
+  email:
+    recipients:
+    - hebahn93@gmail.com
+    on_success: always
+    on_failure: always
