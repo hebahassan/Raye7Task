@@ -39,7 +39,7 @@ public class NewsViewModel extends AndroidViewModel {
     private MutableLiveData<Integer> textVisibility = new MutableLiveData<>();
     private MutableLiveData<String> textMsg = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> allToggleSelection; //true -> api, false -> fav
+    private MutableLiveData<Boolean> allToggleSelection; //true -> api list, false -> favorites list
 
     private PrefUtil prefUtil;
 
@@ -54,6 +54,10 @@ public class NewsViewModel extends AndroidViewModel {
         apiService = ApiClient.getClient().create(ApiService.class);
     }
 
+    /**
+     * Return all articles
+     * @param page number of current page that used in api call in order to load more data
+     */
     public void getNewsLiveData(int page){
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("apiKey", Const.API_KEY);
@@ -131,6 +135,9 @@ public class NewsViewModel extends AndroidViewModel {
         return allToggleSelection;
     }
 
+    /**
+     * clicks on All Articles button in articles activity
+     */
     public void onAllClicked(){
         articleList.clear();
         articlesData.setValue(articleList);
@@ -139,11 +146,19 @@ public class NewsViewModel extends AndroidViewModel {
         allToggleSelection.setValue(true);
     }
 
+    /**
+     * Clicks on Favorites button in articles activity
+     */
     public void onFavClick(){
         articlesData.setValue(prefUtil.getFavoritesList());
         allToggleSelection.setValue(false);
     }
 
+    /**
+     * imageUrl property used in XML file to set image for imageView content
+     * @param imageView view takes the image
+     * @param url article image url
+     */
     @BindingAdapter("imageUrl")
     public static void loadImage(ImageView imageView, String url){
         Context context = imageView.getContext();

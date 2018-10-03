@@ -31,11 +31,19 @@ public class PrefUtil {
         gson = new Gson();
     }
 
+    /**
+     * Cashing user favorite articles
+     * @param articlesList list of articles selected by user
+     */
     public void saveFavoritesList(List<Article> articlesList){
         String favString = gson.toJson(articlesList);
         editor.putString(Const.FAV, favString).apply();
     }
 
+    /**
+     * Get cashed articles
+     * @return list of articles
+     */
     public List<Article> getFavoritesList(){
         List<Article> favArticleList;
         if(sharedPreferences.contains(Const.FAV)){

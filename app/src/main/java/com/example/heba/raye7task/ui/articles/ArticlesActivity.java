@@ -54,6 +54,9 @@ public class ArticlesActivity extends AppCompatActivity {
         onScroll();
     }
 
+    /**
+     * Load more articles in recyclerview
+     */
     private void onScroll(){
         binding.RVNews.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
