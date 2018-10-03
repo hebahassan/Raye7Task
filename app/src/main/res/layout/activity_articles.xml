@@ -6,7 +6,7 @@
     <data>
         <variable
             name="newsViewModel"
-            type="com.example.heba.raye7task.viewmodel.NewsViewModel"/>
+            type="com.example.heba.raye7task.ui.articles.NewsViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -63,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:background="@drawable/all_selected"
+                android:background="@{newsViewModel.allToggleSelection ? @drawable/all_selected : @drawable/all_unselected}"
                 android:text="All Articles"
                 android:textColor="@color/colorAccent"
                 android:onClick="@{()-> newsViewModel.onAllClicked()}"/>
@@ -73,7 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:background="@drawable/fav_unselected"
+                android:background="@{!newsViewModel.allToggleSelection ? @drawable/fav_selected : @drawable/fav_unselected}"
                 android:text="Favorites"
                 android:textColor="@color/colorAccent"
                 android:onClick="@{()-> newsViewModel.onFavClick()}"/>

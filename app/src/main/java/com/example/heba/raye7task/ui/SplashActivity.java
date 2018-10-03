@@ -1,4 +1,4 @@
-package com.example.heba.raye7task.view.ui;
+package com.example.heba.raye7task.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.heba.raye7task.R;
+import com.example.heba.raye7task.ui.articles.ArticlesActivity;
 
 public class SplashActivity extends AppCompatActivity {
     @Override

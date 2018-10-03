@@ -1,4 +1,4 @@
-package com.example.heba.raye7task.view.ui;
+package com.example.heba.raye7task.ui.articles;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,8 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.ActivityArticlesBinding;
 import com.example.heba.raye7task.model.Article;
-import com.example.heba.raye7task.view.adapter.ArticlesAdapter;
-import com.example.heba.raye7task.viewmodel.NewsViewModel;
 
 import java.util.List;
 
@@ -30,11 +28,13 @@ public class ArticlesActivity extends AppCompatActivity {
         binding.setNewsViewModel(newsViewModel);
         binding.setLifecycleOwner(this);
 
+        newsViewModel.getNewsLiveData();
         newsViewModel.getArticlesData().observe(this, new Observer<List<Article>>() {
             @Override
-            public void onChanged(@Nullable List<Article> articles) {
+            public void onChanged(@Nullable final List<Article> articles) {
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ArticlesActivity.this);
                 articlesAdapter = new ArticlesAdapter(articles, ArticlesActivity.this);
+
                 binding.RVNews.setLayoutManager(layoutManager);
                 binding.RVNews.setAdapter(articlesAdapter);
 

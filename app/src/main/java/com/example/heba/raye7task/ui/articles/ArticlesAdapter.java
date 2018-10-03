@@ -1,26 +1,21 @@
-package com.example.heba.raye7task.view.adapter;
+package com.example.heba.raye7task.ui.articles;
 
-import android.app.Activity;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.heba.raye7task.R;
 import com.example.heba.raye7task.databinding.RowArticleBinding;
-import com.example.heba.raye7task.generated.callback.OnClickListener;
 import com.example.heba.raye7task.model.Article;
 import com.example.heba.raye7task.util.PrefUtil;
-import com.example.heba.raye7task.viewmodel.ArticleViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +38,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         RowArticleBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.row_article, parent, false);
 
-        ArticleViewModel articleViewModel = ViewModelProviders.of((AppCompatActivity)context).get(ArticleViewModel.class);
-        binding.setArticleVM(articleViewModel);
-        binding.setLifecycleOwner((AppCompatActivity)context);
-
         return new ArticleItemView(binding);
     }
 
@@ -66,12 +57,13 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         return articlesList != null && articlesList.size() > 0 ? articlesList.size() : 0;
     }
 
-    class ArticleItemView extends RecyclerView.ViewHolder {
+    class ArticleItemView extends RecyclerView.ViewHolder implements View.OnClickListener {
         RowArticleBinding binding;
 
         ArticleItemView(final RowArticleBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.getRoot().setOnClickListener(this);
 
             binding.IBFav.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,19 +77,38 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
                         favArticlesList = prefUtil.getFavoritesList();
                         favArticlesList.add(article);
                         prefUtil.saveFavoritesList(favArticlesList);
-                    } else {
+                    }
+                    else {
                         binding.IBFav.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.fav_icon));
 
+                        articlesList.remove(article);
+                        notifyDataSetChanged();
+
                         favArticlesList = prefUtil.getFavoritesList();
-                        for (Article a : favArticlesList) {
-                            if (a.getTitle().equals(article.getTitle())) {
-                                favArticlesList.remove(favArticlesList.indexOf(a));
+                        for (int i = 0 ; i < favArticlesList.size() ; i++) {
+                            if (favArticlesList.get(i).getTitle().equals(article.getTitle())) {
+                                favArticlesList.remove(i);
                             }
                         }
                         prefUtil.saveFavoritesList(favArticlesList);
                     }
                 }
             });
+        }
+
+        @Override
+        public void onClick(View view) {
+            Article article = articlesList.get(getAdapterPosition());
+            String articleUrl = article.getUrl();
+
+            Log.d("article_url", articleUrl);
+
+            if (!articleUrl.startsWith("http://") && !articleUrl.startsWith("https://"))
+                articleUrl = "http://" + articleUrl;
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl));
+            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(browserIntent);
         }
     }
 }

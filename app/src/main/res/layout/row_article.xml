@@ -10,7 +10,7 @@
 
             <variable
                 name="articleVM"
-                type="com.example.heba.raye7task.viewmodel.ArticleViewModel"/>
+                type="com.example.heba.raye7task.ui.articles.NewsViewModel"/>
     </data>
 
     <LinearLayout
@@ -20,12 +20,10 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{()-> articleVM.onArticleClicked(article.url)}">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/IV_article_image"
-                imageUrl="@{article.urlToImage}"
                 android:layout_width="70dp"
                 android:layout_height="90dp"
                 android:layout_marginStart="10dp"
@@ -35,7 +33,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/article" />
+                app:srcCompat="@drawable/article"
+                imageUrl="@{article.urlToImage}"/>
 
             <TextView
                 android:id="@+id/TV_article_name"
@@ -79,9 +78,6 @@
                 android:src="@drawable/fav_icon"
                 android:scaleType="fitCenter"
                 android:padding="0dp"/>
-
-            <!--android:src="@{article.fav ? @drawable/fav_h_icon : @drawable/fav_icon}" -->
-            <!--android:onClick="@{()-> articleVM.onFavClicked(article)}"-->
 
         </android.support.constraint.ConstraintLayout>
 
