@@ -2,7 +2,7 @@
 
 Display **USA** **Today** English articles
 
-## Archtictural
+## Archticture
 MVVM
 
 ## Built with
