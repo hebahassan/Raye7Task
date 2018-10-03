@@ -5,7 +5,7 @@ Display **USA** **Today** English articles
 ## Archticture
 MVVM
 
-## Built with
+### Built with
 * dataBinding
 * LiveData
 
